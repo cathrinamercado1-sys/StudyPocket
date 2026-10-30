@@ -1,0 +1,579 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#e9eee3">
+<title>StudyPocket</title>
+
+<style>
+:root {
+  --sage: #71866f;
+  --dark: #344a38;
+  --light: #e9eee3;
+  --cream: #faf8ef;
+  --white: #ffffff;
+  --muted: #7c8878;
+  --line: #e1e6dc;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--dark);
+  font-family: Arial, sans-serif;
+}
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+header {
+  padding: 22px 20px 16px;
+  background: var(--light);
+  border-radius: 0 0 25px 25px;
+}
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+.logo span { color: var(--sage); }
+.tagline {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+.leaf { font-size: 27px; }
+.welcome {
+  margin-top: 20px;
+  background: var(--cream);
+  padding: 20px;
+  border-radius: 18px;
+}
+.welcome small { color: var(--sage); font-weight: bold; }
+.welcome h1 { font-size: 23px; margin: 8px 0; }
+.welcome p { color: var(--muted); font-size: 13px; margin: 0; }
+main {
+  max-width: 600px;
+  margin: auto;
+  padding: 18px 16px 100px;
+}
+.section-title {
+  font-size: 19px;
+  margin: 12px 0;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  padding: 17px;
+  margin-bottom: 12px;
+}
+.feature {
+  min-height: 125px;
+  text-align: left;
+  border: 1px solid var(--line);
+  background: var(--white);
+  border-radius: 17px;
+  padding: 16px;
+  color: var(--dark);
+}
+.feature:active { background: var(--light); }
+.feature .emoji { font-size: 25px; }
+.feature strong {
+  display: block;
+  margin-top: 12px;
+  font-size: 14px;
+}
+.feature small { color: var(--muted); font-size: 11px; }
+.page { display: none; }
+.page.active { display: block; }
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--cream);
+  color: var(--dark);
+  margin: 7px 0 12px;
+  outline-color: var(--sage);
+}
+textarea { min-height: 95px; resize: vertical; }
+.primary {
+  border: 0;
+  background: var(--sage);
+  color: white;
+  border-radius: 11px;
+  padding: 12px 16px;
+  font-weight: bold;
+}
+.secondary {
+  background: var(--light);
+  color: var(--dark);
+  border: 0;
+  border-radius: 9px;
+  padding: 9px 12px;
+}
+.danger {
+  background: #f6e6df;
+  color: #995b49;
+  border: 0;
+  padding: 8px 10px;
+  border-radius: 9px;
+}
+.item {
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+.item:last-child { border: 0; }
+.item h3 { margin: 0 0 5px; font-size: 15px; }
+.item p { margin: 4px 0; color: var(--muted); font-size: 13px; white-space: pre-wrap; }
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 4px max(10px, env(safe-area-inset-bottom));
+  z-index: 10;
+}
+nav button {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-size: 10px;
+  padding: 4px;
+}
+nav button span { display: block; font-size: 20px; margin-bottom: 3px; }
+nav button.selected { color: var(--sage); font-weight: bold; }
+.timer {
+  font-size: 53px;
+  font-weight: bold;
+  text-align: center;
+  padding: 25px 0;
+}
+.center { text-align: center; }
+.progress {
+  height: 8px;
+  background: var(--light);
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+.progress div {
+  height: 100%;
+  background: var(--sage);
+  width: 0%;
+}
+.question { font-size: 17px; font-weight: bold; line-height: 1.5; }
+.answer {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 13px;
+  margin: 8px 0;
+  color: var(--dark);
+}
+.answer:disabled { opacity: 1; }
+.answer.correct { background: #e3efdf; border-color: #789477; }
+.answer.wrong { background: #f7e5df; border-color: #c88c7b; }
+.muted { color: var(--muted); font-size: 12px; }
+.empty { color: var(--muted); text-align: center; padding: 20px 5px; font-size: 13px; }
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="top">
+    <div>
+      <div class="logo">Study<span>Pocket.</span></div>
+      <div class="tagline">YOUR LITTLE STUDY COMPANION</div>
+    </div>
+    <div class="leaf">🌿</div>
+  </div>
+  <div class="welcome">
+    <small>WELCOME, STUDENT!</small>
+    <h1>Small steps, big progress.</h1>
+    <p>Make today count. One lesson at a time.</p>
+  </div>
+</header>
+
+<main>
+
+<!-- HOME -->
+<section id="home" class="page active">
+  <h2 class="section-title">Your study space ✨</h2>
+  <div class="grid">
+    <button class="feature" onclick="showPage('reviewers')">
+      <div class="emoji">📚</div>
+      <strong>My Reviewers</strong>
+      <small>Save your study notes</small>
+    </button>
+    <button class="feature" onclick="showPage('quiz')">
+      <div class="emoji">🧠</div>
+      <strong>Quick Quiz</strong>
+      <small>Test your knowledge</small>
+    </button>
+    <button class="feature" onclick="showPage('exams')">
+      <div class="emoji">📅</div>
+      <strong>Exam Tracker</strong>
+      <small>Remember your exams</small>
+    </button>
+    <button class="feature" onclick="showPage('timer')">
+      <div class="emoji">⏱️</div>
+      <strong>Study Sprint</strong>
+      <small>Focus and study</small>
+    </button>
+  </div>
+  <h2 class="section-title">A little reminder 🌱</h2>
+  <div class="card">
+    <h3>Consistency over perfection.</h3>
+    <p class="muted">You don't have to finish everything today. Just take one step forward.</p>
+  </div>
+  <div class="card">
+    <div class="item-row">
+      <strong>Your saved reviewers</strong>
+      <strong id="noteCount">0</strong>
+    </div>
+    <div class="item-row">
+      <strong>Upcoming exams</strong>
+      <strong id="examCount">0</strong>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWERS -->
+<section id="reviewers" class="page">
+  <h2 class="section-title">📚 My Reviewers</h2>
+  <p class="muted">Keep your important notes in one place.</p>
+  <div class="card">
+    <label>Reviewer title</label>
+    <input id="noteTitle" placeholder="e.g. Anatomy - Respiratory System">
+    <label>Your notes</label>
+    <textarea id="noteBody" placeholder="Write your study notes here..."></textarea>
+    <button class="primary" onclick="addNote()">Save reviewer</button>
+  </div>
+  <div class="card">
+    <strong>My saved notes</strong>
+    <div id="notesList"></div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" class="page">
+  <h2 class="section-title">🧠 Quick Quiz</h2>
+  <p class="muted">A little practice goes a long way.</p>
+  <div class="card" id="quizBox">
+    <div class="item-row">
+      <strong>General Science Quiz</strong>
+      <span class="muted">5 questions</span>
+    </div>
+    <p class="muted">Test your basic science knowledge.</p>
+    <button class="primary" onclick="startQuiz()">Start quiz</button>
+  </div>
+</section>
+
+<!-- EXAMS -->
+<section id="exams" class="page">
+  <h2 class="section-title">📅 Exam Tracker</h2>
+  <p class="muted">Keep track of your upcoming exams.</p>
+  <div class="card">
+    <label>Exam or subject name</label>
+    <input id="examName" placeholder="e.g. Anatomy prelim exam">
+    <label>Exam date</label>
+    <input id="examDate" type="date">
+    <button class="primary" onclick="addExam()">Add exam</button>
+  </div>
+  <div class="card">
+    <strong>Upcoming exams</strong>
+    <div id="examsList"></div>
+  </div>
+</section>
+
+<!-- TIMER -->
+<section id="timer" class="page">
+  <h2 class="section-title">⏱️ Study Sprint</h2>
+  <p class="muted">Give yourself time to focus.</p>
+  <div class="card center">
+    <div class="muted">FOCUS SESSION</div>
+    <div class="timer" id="clock">20:00</div>
+    <div class="progress"><div id="timerProgress"></div></div>
+    <p id="timerStatus" class="muted">Ready when you are 🌿</p>
+    <button class="primary" id="timerButton" onclick="toggleTimer()">Start studying</button>
+    <button class="secondary" onclick="resetTimer()">Reset</button>
+  </div>
+  <div class="card">
+    <strong>Study tip</strong>
+    <p class="muted">Put away distractions, prepare your materials, and focus on one task at a time.</p>
+  </div>
+</section>
+
+</main>
+
+<nav>
+  <button class="selected" data-page="home" onclick="showPage('home')"><span>⌂</span>Home</button>
+  <button data-page="reviewers" onclick="showPage('reviewers')"><span>📚</span>Reviewers</button>
+  <button data-page="quiz" onclick="showPage('quiz')"><span>🧠</span>Quiz</button>
+  <button data-page="exams" onclick="showPage('exams')"><span>📅</span>Exams</button>
+  <button data-page="timer" onclick="showPage('timer')"><span>⏱️</span>Timer</button>
+</nav>
+
+<script>
+const getData = (key) => {
+  try { return JSON.parse(localStorage.getItem(key)) || []; }
+  catch { return []; }
+};
+const saveData = (key, value) => {
+  localStorage.setItem(key, JSON.stringify(value));
+};
+const safe = (value) => String(value).replace(/[&<>"']/g, c => ({
+  '&':'&amp;', '<':'&lt;', '>':'&gt;',
+  '"':'&quot;', "'":'&#39;'
+}[c]));
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b => {
+    b.classList.toggle('selected', b.dataset.page === id);
+  });
+  window.scrollTo(0, 0);
+  if (id === 'home') updateHome();
+}
+
+function updateHome() {
+  document.getElementById('noteCount').textContent = getData('sp_notes').length;
+  document.getElementById('examCount').textContent = getData('sp_exams').length;
+}
+
+function addNote() {
+  const title = document.getElementById('noteTitle').value.trim();
+  const body = document.getElementById('noteBody').value.trim();
+  if (!title || !body) return alert('Please enter a title and your notes.');
+  const notes = getData('sp_notes');
+  notes.unshift({id:Date.now(), title, body});
+  saveData('sp_notes', notes);
+  document.getElementById('noteTitle').value = '';
+  document.getElementById('noteBody').value = '';
+  renderNotes();
+  updateHome();
+  alert('Reviewer saved successfully! 🌿');
+}
+
+function deleteNote(id) {
+  if (!confirm('Delete this reviewer?')) return;
+  saveData('sp_notes', getData('sp_notes').filter(n => n.id !== id));
+  renderNotes();
+  updateHome();
+}
+
+function renderNotes() {
+  const notes = getData('sp_notes');
+  const list = document.getElementById('notesList');
+  if (!notes.length) {
+    list.innerHTML = '<div class="empty">No reviewers yet. Save your first notes!</div>';
+    return;
+  }
+  list.innerHTML = notes.map(n => `
+    <div class="item">
+      <div class="item-row">
+        <h3>${safe(n.title)}</h3>
+        <button class="danger" onclick="deleteNote(${n.id})">Delete</button>
+      </div>
+      <p>${safe(n.body)}</p>
+    </div>`).join('');
+}
+
+function addExam() {
+  const name = document.getElementById('examName').value.trim();
+  const date = document.getElementById('examDate').value;
+  if (!name || !date) return alert('Please enter the subject and exam date.');
+  if (date < localToday()) return alert('Please choose today or a future date.');
+  const exams = getData('sp_exams');
+  exams.push({id:Date.now(), name, date});
+  exams.sort((a,b) => a.date.localeCompare(b.date));
+  saveData('sp_exams', exams);
+  document.getElementById('examName').value = '';
+  document.getElementById('examDate').value = '';
+  renderExams();
+  updateHome();
+}
+
+function localToday() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function deleteExam(id) {
+  if (!confirm('Remove this exam?')) return;
+  saveData('sp_exams', getData('sp_exams').filter(e => e.id !== id));
+  renderExams();
+  updateHome();
+}
+
+function renderExams() {
+  const exams = getData('sp_exams');
+  const list = document.getElementById('examsList');
+  if (!exams.length) {
+    list.innerHTML = '<div class="empty">No exams added yet.</div>';
+    return;
+  }
+  list.innerHTML = exams.map(e => {
+    const days = Math.round((new Date(e.date+'T00:00:00') - new Date(localToday()+'T00:00:00')) / 86400000);
+    let label = days === 0 ? 'Today!' : days === 1 ? 'Tomorrow' : days + ' days left';
+    return `<div class="item item-row">
+      <div><h3>${safe(e.name)}</h3><p>${safe(e.date)} · ${label}</p></div>
+      <button class="danger" onclick="deleteExam(${e.id})">Remove</button>
+    </div>`;
+  }).join('');
+}
+
+// QUIZ
+const questions = [
+  {q:'What is the basic structural and functional unit of life?',a:['Tissue','Cell','Organ','System'],c:1},
+  {q:'Which organ pumps blood throughout the body?',a:['Lungs','Kidneys','Heart','Liver'],c:2},
+  {q:'What is the liquid component of blood called?',a:['Plasma','Platelet','Hemoglobin','Leukocyte'],c:0},
+  {q:'Which organ is primarily responsible for filtering blood to produce urine?',a:['Stomach','Kidney','Heart','Pancreas'],c:1},
+  {q:'Which blood cells help defend the body against infection?',a:['Red blood cells','Platelets','White blood cells','Plasma'],c:2}
+];
+let questionIndex = 0;
+let score = 0;
+let answered = false;
+
+function startQuiz() {
+  questionIndex = 0;
+  score = 0;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  const q = questions[questionIndex];
+  document.getElementById('quizBox').innerHTML = `
+    <div class="item-row">
+      <strong>Question ${questionIndex+1} of ${questions.length}</strong>
+      <strong>${score} points</strong>
+    </div>
+    <div class="progress"><div style="width:${questionIndex/questions.length*100}%"></div></div>
+    <p class="question">${safe(q.q)}</p>
+    <div id="answers">
+      ${q.a.map((a,i) => `<button class="answer" onclick="chooseAnswer(${i})">${String.fromCharCode(65+i)}. ${safe(a)}</button>`).join('')}
+    </div>
+    <p id="feedback" class="muted"></p>
+    <button id="nextButton" class="primary" style="display:none" onclick="nextQuestion()">Next question</button>
+  `;
+}
+
+function chooseAnswer(index) {
+  if (answered) return;
+  answered = true;
+  const q = questions[questionIndex];
+  const buttons = document.querySelectorAll('#answers button');
+  buttons.forEach((b,i) => {
+    b.disabled = true;
+    if (i === q.c) b.classList.add('correct');
+    if (i === index && i !== q.c) b.classList.add('wrong');
+  });
+  const correct = index === q.c;
+  if (correct) score++;
+  document.getElementById('feedback').textContent =
+    correct ? 'Correct! Well done! 🌿' : 'Not quite. Correct answer: ' + q.a[q.c];
+  document.getElementById('nextButton').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  questionIndex++;
+  if (questionIndex < questions.length) {
+    renderQuestion();
+  } else {
+    document.getElementById('quizBox').innerHTML = `
+      <div class="center">
+        <div style="font-size:45px">🌟</div>
+        <h2>Quiz completed!</h2>
+        <div class="timer">${score}/${questions.length}</div>
+        <p>You got ${Math.round(score/questions.length*100)}% correct.</p>
+        <p class="muted">Every practice session is progress.</p>
+        <button class="primary" onclick="startQuiz()">Try again</button>
+      </div>`;
+  }
+}
+
+// TIMER
+let remaining = 20*60;
+let timerInterval = null;
+
+function displayTimer() {
+  const min = Math.floor(remaining/60);
+  const sec = remaining%60;
+  document.getElementById('clock').textContent =
+    String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+  document.getElementById('timerProgress').style.width =
+    ((1200-remaining)/1200*100)+'%';
+}
+
+function toggleTimer() {
+  const button = document.getElementById('timerButton');
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    button.textContent = 'Resume studying';
+    document.getElementById('timerStatus').textContent = 'Paused. Take your time.';
+    return;
+  }
+  if (remaining <= 0) resetTimer();
+  button.textContent = 'Pause';
+  document.getElementById('timerStatus').textContent = 'You are doing great. Keep focusing!';
+  timerInterval = setInterval(() => {
+    remaining--;
+    displayTimer();
+    if (remaining <= 0) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      button.textContent = 'Start again';
+      document.getElementById('timerStatus').textContent = 'Session complete! Great work! 🌿';
+      alert('Your 20-minute study session is complete!');
+    }
+  }, 1000);
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  remaining = 20*60;
+  displayTimer();
+  document.getElementById('timerButton').textContent = 'Start studying';
+  document.getElementById('timerStatus').textContent = 'Ready when you are 🌿';
+}
+
+renderNotes();
+renderExams();
+updateHome();
+displayTimer();
+document.getElementById('examDate').min = localToday();
+</script>
+
+</body>
+</html>
